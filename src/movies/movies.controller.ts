@@ -55,6 +55,38 @@ export class MoviesController {
     return this.moviesService.findAll(page, pageSize);
   }
 
+  @Get('search')
+  @ApiOkResponse({ type: [MovieListItemDto] })
+  @ApiQuery({
+    name: 'q',
+    required: true,
+    type: String,
+    description: 'Full-text search query (searches title, cast, genres, plot)',
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    example: DEFAULT_PAGE,
+    description: '1-based page number',
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    required: false,
+    type: Number,
+    example: DEFAULT_PAGE_SIZE,
+    description: 'Number of records per page',
+  })
+  search(
+    @Query('q') query: string,
+    @Query('page', new DefaultValuePipe(DEFAULT_PAGE), ParseIntPipe)
+    page: number,
+    @Query('pageSize', new DefaultValuePipe(DEFAULT_PAGE_SIZE), ParseIntPipe)
+    pageSize: number,
+  ) {
+    return this.moviesService.search(query, page, pageSize);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.moviesService.findById(id);

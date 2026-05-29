@@ -37,6 +37,23 @@ export class MoviesRepository {
       .exec();
   }
 
+  async searchByTitle(
+    query: string,
+    page: number,
+    pageSize: number,
+  ): Promise<MovieListItemDto[]> {
+    const skip = (page - 1) * pageSize;
+
+    return this.movieModel
+      .find({ $text: { $search: query } }, { score: { $meta: 'textScore' } })
+      .select('title plot genres poster year rated imdb num_mflix_comments')
+      .sort({ score: { $meta: 'textScore' }, title: 1 })
+      .skip(skip)
+      .limit(pageSize)
+      .lean<MovieListItemDto[]>()
+      .exec();
+  }
+
   async findById(id: string): Promise<MovieDocument | null> {
     return this.movieModel.findById(id).exec();
   }

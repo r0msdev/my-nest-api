@@ -29,6 +29,16 @@ export class MoviesService {
     return this.moviesRepository.findAll(page, pageSize);
   }
 
+  search(
+    query: string,
+    page: number,
+    pageSize: number,
+  ): Promise<MovieListItemDto[]> {
+    validatePagination(page, pageSize);
+
+    return this.moviesRepository.searchByTitle(query, page, pageSize);
+  }
+
   async findById(id: string): Promise<MovieDocument> {
     this.ensureValidObjectId(id);
 
