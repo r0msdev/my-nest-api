@@ -8,6 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
   DEFAULT_PAGE,
   DEFAULT_PAGE_SIZE,
@@ -15,6 +16,7 @@ import {
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CommentsService } from './comments.service';
 
+@ApiTags('comments')
 @Controller('movies/:movieId/comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
@@ -28,6 +30,20 @@ export class CommentsController {
   }
 
   @Get()
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    example: DEFAULT_PAGE,
+    description: '1-based page number',
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    required: false,
+    type: Number,
+    example: DEFAULT_PAGE_SIZE,
+    description: 'Number of records per page',
+  })
   findAll(
     @Param('movieId') movieId: string,
     @Query('page', new DefaultValuePipe(DEFAULT_PAGE), ParseIntPipe)
