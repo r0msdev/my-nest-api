@@ -10,11 +10,12 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
   DEFAULT_PAGE,
   DEFAULT_PAGE_SIZE,
 } from '../common/pagination/pagination';
+import { MovieListItemDto } from './dto/movie-list-item.dto';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MoviesService } from './movies.service';
@@ -30,6 +31,7 @@ export class MoviesController {
   }
 
   @Get()
+  @ApiOkResponse({ type: [MovieListItemDto] })
   @ApiQuery({
     name: 'page',
     required: false,

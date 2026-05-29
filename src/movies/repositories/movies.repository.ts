@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { MovieListItemDto } from '../dto/movie-list-item.dto';
 import { CreateMovieDto } from '../dto/create-movie.dto';
 import { UpdateMovieDto } from '../dto/update-movie.dto';
 import { Movie, MovieDocument } from '../schemas/movie.schema';
@@ -23,14 +24,16 @@ export class MoviesRepository {
     });
   }
 
-  async findAll(page: number, pageSize: number): Promise<MovieDocument[]> {
+  async findAll(page: number, pageSize: number): Promise<MovieListItemDto[]> {
     const skip = (page - 1) * pageSize;
 
     return this.movieModel
       .find()
+      .select('title plot genres poster year rated imdb num_mflix_comments')
       .sort({ title: 1 })
       .skip(skip)
       .limit(pageSize)
+      .lean<MovieListItemDto[]>()
       .exec();
   }
 

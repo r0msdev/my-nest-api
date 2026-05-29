@@ -6,6 +6,7 @@ import {
 import { CommentsRepository } from '../comments/repositories/comments.repository';
 import { Types } from 'mongoose';
 import { validatePagination } from '../common/pagination/pagination';
+import { MovieListItemDto } from './dto/movie-list-item.dto';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MoviesRepository } from './repositories/movies.repository';
@@ -22,7 +23,7 @@ export class MoviesService {
     return this.moviesRepository.create(createMovieDto);
   }
 
-  findAll(page: number, pageSize: number): Promise<MovieDocument[]> {
+  findAll(page: number, pageSize: number): Promise<MovieListItemDto[]> {
     validatePagination(page, pageSize);
 
     return this.moviesRepository.findAll(page, pageSize);
