@@ -34,4 +34,10 @@ export class CommentsRepository {
       .limit(pageSize)
       .exec();
   }
+
+  async deleteByMovieId(
+    movieId: Types.ObjectId,
+  ): Promise<{ deletedCount?: number }> {
+    return this.commentModel.deleteMany({ movie_id: movieId }).exec();
+  }
 }

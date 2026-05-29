@@ -4,14 +4,10 @@ import { validatePagination } from '../common/pagination/pagination';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CommentsRepository } from './repositories/comments.repository';
 import { CommentDocument } from './schemas/comment.schema';
-import { MoviesRepository } from '../movies/repositories/movies.repository';
 
 @Injectable()
 export class CommentsService {
-  constructor(
-    private readonly commentsRepository: CommentsRepository,
-    private readonly moviesRepository: MoviesRepository,
-  ) {}
+  constructor(private readonly commentsRepository: CommentsRepository) {}
 
   async createForMovie(
     movieId: string,

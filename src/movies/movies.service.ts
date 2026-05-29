@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { CommentsRepository } from '../comments/repositories/comments.repository';
 import { Types } from 'mongoose';
 import { validatePagination } from '../common/pagination/pagination';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -12,7 +13,10 @@ import { MovieDocument } from './schemas/movie.schema';
 
 @Injectable()
 export class MoviesService {
-  constructor(private readonly moviesRepository: MoviesRepository) {}
+  constructor(
+    private readonly moviesRepository: MoviesRepository,
+    private readonly commentsRepository: CommentsRepository,
+  ) {}
 
   create(createMovieDto: CreateMovieDto): Promise<MovieDocument> {
     return this.moviesRepository.create(createMovieDto);
@@ -59,6 +63,8 @@ export class MoviesService {
     if (movie === null) {
       throw new NotFoundException(`Movie ${id} was not found`);
     }
+
+    await this.commentsRepository.deleteByMovieId(new Types.ObjectId(id));
 
     return movie;
   }
